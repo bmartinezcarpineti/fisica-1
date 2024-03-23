@@ -9,7 +9,7 @@ def cartesianas_a_polares(x, y):
 
 def polares_a_cartesianas(r, theta):
 
-    x = r * math.cos(theta)
-    y = r * math.sin(theta)
+    x = r * math.cos(math.radians(theta))
+    y = r * math.sin(math.radians(theta))
     
     return x, y
