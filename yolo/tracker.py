@@ -26,13 +26,16 @@ model = YOLO(model_path)
 
 threshold = 0.7
 
-reference_object_width = 0.05  # Adjust based on your reference object
+object_width_in_meters = 0.05  # Adjust based on your reference object
+object_width_in_pixels = 110
+#pixels_per_meter = object_width_in_pixels  / object_width_in_meteres
 
 # Get frame rate
 frame_rate = cap.get(cv2.CAP_PROP_FPS)
 
 # Initialize variables for tracking
-bullet_centroid_prev = None  # Store previous bullet centroid (x, y)
+object_centroid_prev = None  # Store previous bullet centroid (x, y)
+#object_speed_prev = None
 
 while ret:
 
@@ -44,22 +47,25 @@ while ret:
 
         if score > threshold:  # Only process if score above threshold
             # Calculate bullet centroid
-            bullet_centroid = (int((x1 + x2) / 2), int((y1 + y2) / 2))
+            object_centroid = (int((x1 + x2) / 2), int((y1 + y2) / 2))
 
             # Calculate speed if previous centroid exists (i.e., tracking)
-            if bullet_centroid_prev is not None:
+            if object_centroid_prev is not None:
                 # Distance traveled in pixels between frames
-                distance_pixels = ((bullet_centroid[0] - bullet_centroid_prev[0])**2 
-                                  + (bullet_centroid[1] - bullet_centroid_prev[1])**2)**0.5
+                distance_pixels = ((object_centroid[0] - object_centroid_prev[0])**2 
+                                  + (object_centroid[1] - object_centroid_prev[1])**2)**0.5
 
                 # Convert pixel distance to real units based on reference object
-                distance_real_units = distance_pixels * reference_object_width / (x2 - x1)  
+                pixels_per_meter = (x2 - x1) / object_width_in_meters 
+
+                distance_real_units = distance_pixels / pixels_per_meter
 
                 # Calculate speed (considering frame rate)
-                speed = distance_real_units * frame_rate
+                time_difference = 1 / frame_rate
+                speed = distance_real_units / time_difference
 
             # Update previous centroid for next frame
-            bullet_centroid_prev = bullet_centroid
+            object_centroid_prev = object_centroid
 
             # Draw bounding box and label
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 4)
