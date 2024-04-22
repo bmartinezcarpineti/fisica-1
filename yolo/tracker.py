@@ -108,13 +108,7 @@ plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_time.png')
 plt.clf()
 
 # object variables in function of position plot
-all_object_speed_in_x.insert(0,0)
 all_object_acceleration_in_x.insert(0,0)
-
-plt.subplot(211)
-plt.plot(all_object_position_in_x, all_object_speed_in_x, label="Speed in X")
-plt.ylabel("m/s")
-plt.legend()
 
 plt.subplot(212)
 plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X")
