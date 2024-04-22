@@ -35,7 +35,7 @@ successful_video_reading, frame = input_video.read()
 input_video_frame_height, input_video_frame_width, _ = frame.shape
 output_video = cv2.VideoWriter(OUTPUT_VIDEO_PATH, cv2.VideoWriter_fourcc(*'MP4V'), int(input_video.get(cv2.CAP_PROP_FPS)), (input_video_frame_width, input_video_frame_height))
 
-# object variables initalization
+# object variables and constants initalization
 object_speed_in_x = 0
 object_acceleration_in_x = 0
 previous_object_position_in_x = None
@@ -43,6 +43,8 @@ previous_object_speed_in_x = None
 all_object_position_in_x = []
 all_object_speed_in_x = []
 all_object_acceleration_in_x = []
+all_object_force_in_x = []
+OBJECT_MASS = 0.033 # unit: kg
 
 # object detection loop
 while successful_video_reading:
@@ -110,9 +112,17 @@ plt.clf()
 # object variables in function of position plot
 all_object_acceleration_in_x.insert(0,0)
 
-plt.subplot(212)
+for acceleration in all_object_acceleration_in_x:
+    all_object_force_in_x.append(OBJECT_MASS * acceleration)
+
+plt.subplot(211)
 plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X")
 plt.ylabel("m/s^2")
+plt.legend()
+
+plt.subplot(212)
+plt.plot(all_object_position_in_x, all_object_force_in_x, label="Force in X")
+plt.ylabel("N (kg * m/s^2)")
 plt.xlabel("Position in X (m)")
 plt.legend()
 
