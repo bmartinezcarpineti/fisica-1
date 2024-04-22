@@ -117,9 +117,9 @@ plt.ylabel("m/s")
 plt.legend()
 
 plt.subplot(212)
-plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X", color='orange')
+plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X")
 plt.ylabel("m/s^2")
-plt.xlabel("Position (m)")
+plt.xlabel("Position in X (m)")
 plt.legend()
 
 plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_position.png'))
