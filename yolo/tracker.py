@@ -1,7 +1,9 @@
 import os
 import cv2
-from ultralytics import YOLO
+import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+from ultralytics import YOLO
 
 # files constants
 TRACKER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -9,7 +11,7 @@ INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos')
 INPUT_VIDEO_NAME = 'vid8.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 OUTPUT_VIDEO_PATH = '{}_out.mp4'.format(INPUT_VIDEO_PATH)
-PLOTS_FILE_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'plots', 'object_plots.png')
+PLOTS_FILE_DIRECTORY = os.path.join(TRACKER_DIRECTORY_PATH, 'plots')
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'model.pt')
 
 if not os.path.exists(INPUT_VIDEO_PATH):
@@ -84,9 +86,9 @@ input_video.release()
 output_video.release()
 cv2.destroyAllWindows()
 
-# plot
+# object variables in function of time plot
 plt.subplot(311)
-plt.plot(all_object_position_in_x, label="Postion in X")
+plt.plot(all_object_position_in_x, label="Position in X")
 plt.ylabel("m")
 plt.legend()
 
@@ -98,7 +100,26 @@ plt.legend()
 plt.subplot(313)
 plt.plot(all_object_acceleration_in_x, label="Acceleration in X")
 plt.ylabel("m/s^2")
-plt.xlabel("t (s)")
+plt.xlabel("Time (s)")
 plt.legend()
 
-plt.savefig(PLOTS_FILE_PATH)
+plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_time.png'))
+
+plt.clf()
+
+# object variables in function of position plot
+all_object_speed_in_x.insert(0,0)
+all_object_acceleration_in_x.insert(0,0)
+
+plt.subplot(211)
+plt.plot(all_object_position_in_x, all_object_speed_in_x, label="Speed in X")
+plt.ylabel("m/s")
+plt.legend()
+
+plt.subplot(212)
+plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X", color='orange')
+plt.ylabel("m/s^2")
+plt.xlabel("Position (m)")
+plt.legend()
+
+plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_position.png'))
