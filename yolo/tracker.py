@@ -23,7 +23,7 @@ OBJECT_WIDTH_IN_METERS = 0.05
 OBJECT_WIDTH_IN_PIXELS = 205
 PIXELS_PER_METER = OBJECT_WIDTH_IN_PIXELS / OBJECT_WIDTH_IN_METERS
 ORIGINAL_INPUT_VIDEO_FPS = 120
-TIME_DIFFERENCE = 1 / ORIGINAL_INPUT_VIDEO_FPS
+TIME_DIFFERENCE = 1 / ORIGINAL_INPUT_VIDEO_FPS # unit: seconds
 
 # AI model constants
 THRESHOLD_CONFIDENCE_SCORE = 0.7
@@ -36,6 +36,7 @@ input_video_frame_height, input_video_frame_width, _ = frame.shape
 output_video = cv2.VideoWriter(OUTPUT_VIDEO_PATH, cv2.VideoWriter_fourcc(*'MP4V'), int(input_video.get(cv2.CAP_PROP_FPS)), (input_video_frame_width, input_video_frame_height))
 
 # object variables and constants initalization
+current_time = 0
 object_speed_in_x = 0
 object_acceleration_in_x = 0
 previous_object_position_in_x = None
@@ -44,17 +45,20 @@ all_object_position_in_x = []
 all_object_speed_in_x = []
 all_object_acceleration_in_x = []
 all_object_force_in_x = []
+all_object_detection_time = []
 OBJECT_MASS = 0.033 # unit: kg
 
 # object detection loop
 while successful_video_reading:
 
     model_detection_results = yolo_model(frame)[0]
+    current_time += TIME_DIFFERENCE
 
     for result in model_detection_results.boxes.data.tolist():
         object_x1, object_y1, object_x2, object_y2, detection_confidence_score, object_class_id = result
 
         if detection_confidence_score > THRESHOLD_CONFIDENCE_SCORE:
+            all_object_detection_time.append(current_time)
             object_position_in_x = int((object_x1 + object_x2) / 2) # the position is represented by the center of the bounding box in the X axis
             all_object_position_in_x.append(object_position_in_x / PIXELS_PER_METER)
 
@@ -89,18 +93,21 @@ output_video.release()
 cv2.destroyAllWindows()
 
 # object variables in function of time plot
+all_object_speed_in_x.insert(0,0)
+all_object_acceleration_in_x.insert(0,0)
+
 plt.subplot(311)
-plt.plot(all_object_position_in_x, label="Position in X")
+plt.plot(all_object_detection_time, all_object_position_in_x, label="Position in X")
 plt.ylabel("m")
 plt.legend()
 
 plt.subplot(312)
-plt.plot(all_object_speed_in_x, label="Speed in X")
+plt.plot(all_object_detection_time, all_object_speed_in_x, label="Speed in X")
 plt.ylabel("m/s")
 plt.legend()
 
 plt.subplot(313)
-plt.plot(all_object_acceleration_in_x, label="Acceleration in X")
+plt.plot(all_object_detection_time, all_object_acceleration_in_x, label="Acceleration in X")
 plt.ylabel("m/s^2")
 plt.xlabel("Time (s)")
 plt.legend()
@@ -110,8 +117,6 @@ plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_time.png')
 plt.clf()
 
 # object variables in function of position plot
-all_object_acceleration_in_x.insert(0,0)
-
 for acceleration in all_object_acceleration_in_x:
     all_object_force_in_x.append(OBJECT_MASS * acceleration)
 
