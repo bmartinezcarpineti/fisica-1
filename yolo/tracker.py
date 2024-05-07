@@ -92,22 +92,33 @@ input_video.release()
 output_video.release()
 cv2.destroyAllWindows()
 
-# object variables in function of time plot
-all_object_speed_in_x.insert(0,0)
-all_object_acceleration_in_x.insert(0,0)
+# data interpolation
+time_points_for_interpolated_plot = np.linspace(min(all_object_detection_time), max(all_object_detection_time), 100)
 
+object_position_interpolation = interp1d(all_object_detection_time, all_object_position_in_x, kind='linear')
+all_object_interpolated_position_in_x = object_position_interpolation(time_points_for_interpolated_plot)
+
+all_object_speed_in_x.insert(0,0)
+object_speed_interpolation = interp1d(all_object_detection_time, all_object_speed_in_x, kind='cubic')
+all_object_interpolated_speed_in_x = object_speed_interpolation(time_points_for_interpolated_plot)
+
+all_object_acceleration_in_x.insert(0,0)
+object_acceleration_interpolation = interp1d(all_object_detection_time, all_object_acceleration_in_x, kind='cubic')
+all_object_interpolated_acceleration_in_x = object_acceleration_interpolation(time_points_for_interpolated_plot)
+
+# object variables in function of time plot
 plt.subplot(311)
-plt.plot(all_object_detection_time, all_object_position_in_x, label="Position in X")
+plt.plot(time_points_for_interpolated_plot, all_object_interpolated_position_in_x, label="Position in X")
 plt.ylabel("m")
 plt.legend()
 
 plt.subplot(312)
-plt.plot(all_object_detection_time, all_object_speed_in_x, label="Speed in X")
+plt.plot(time_points_for_interpolated_plot, all_object_interpolated_speed_in_x, label="Speed in X")
 plt.ylabel("m/s")
 plt.legend()
 
 plt.subplot(313)
-plt.plot(all_object_detection_time, all_object_acceleration_in_x, label="Acceleration in X")
+plt.plot(time_points_for_interpolated_plot, all_object_interpolated_acceleration_in_x, label="Acceleration in X")
 plt.ylabel("m/s^2")
 plt.xlabel("Time (s)")
 plt.legend()
@@ -116,17 +127,27 @@ plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_time.png')
 
 plt.clf()
 
-# object variables in function of position plot
+# force in function of position calculation
 for acceleration in all_object_acceleration_in_x:
     all_object_force_in_x.append(OBJECT_MASS * acceleration)
 
+# data interpolation
+position_in_x_points_for_interpolated_plot = np.linspace(min(all_object_position_in_x), max(all_object_position_in_x), 100)
+
+object_acceleration_position_interpolation = interp1d(all_object_position_in_x, all_object_acceleration_in_x, kind='cubic')
+all_object_interpolated_acceleration_position = object_acceleration_position_interpolation(position_in_x_points_for_interpolated_plot)
+
+object_force_position_interpolation = interp1d(all_object_position_in_x, all_object_force_in_x, kind='cubic')
+all_object_interpolated_force_position = object_force_position_interpolation(position_in_x_points_for_interpolated_plot)
+
+# object variables in function of position plot
 plt.subplot(211)
-plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X")
+plt.plot(position_in_x_points_for_interpolated_plot, all_object_interpolated_acceleration_position, label="Acceleration in X")
 plt.ylabel("m/s^2")
 plt.legend()
 
 plt.subplot(212)
-plt.plot(all_object_position_in_x, all_object_force_in_x, label="Force in X")
+plt.plot(position_in_x_points_for_interpolated_plot, all_object_interpolated_force_position, label="Force in X")
 plt.ylabel("N (kg * m/s^2)")
 plt.xlabel("Position in X (m)")
 plt.legend()
