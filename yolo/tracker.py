@@ -7,8 +7,8 @@ from ultralytics import YOLO
 
 # files constants
 TRACKER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos')
-INPUT_VIDEO_NAME = 'vid8.mp4'
+INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos2')
+INPUT_VIDEO_NAME = 'vid3-2.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 OUTPUT_VIDEO_PATH = '{}_out.mp4'.format(INPUT_VIDEO_PATH)
 PLOTS_FILE_DIRECTORY = os.path.join(TRACKER_DIRECTORY_PATH, 'plots')
@@ -20,9 +20,9 @@ if not os.path.exists(INPUT_VIDEO_PATH):
 
 # video constants
 OBJECT_WIDTH_IN_METERS = 0.05
-OBJECT_WIDTH_IN_PIXELS = 205
+OBJECT_WIDTH_IN_PIXELS = 96
 PIXELS_PER_METER = OBJECT_WIDTH_IN_PIXELS / OBJECT_WIDTH_IN_METERS
-ORIGINAL_INPUT_VIDEO_FPS = 120
+ORIGINAL_INPUT_VIDEO_FPS = 240
 TIME_DIFFERENCE = 1 / ORIGINAL_INPUT_VIDEO_FPS # unit: seconds
 
 # AI model constants
@@ -46,7 +46,8 @@ all_object_speed_in_x = []
 all_object_acceleration_in_x = []
 all_object_force_in_x = []
 all_object_detection_time = []
-OBJECT_MASS = 0.033 # unit: kg
+OBJECT_MASS = 0.283 # unit: kg
+GRAVITY = 9.81
 
 # object detection loop
 while successful_video_reading:
@@ -92,6 +93,13 @@ input_video.release()
 output_video.release()
 cv2.destroyAllWindows()
 
+
+# dynamic friction coefficient calculation
+
+dynamic_friction_coefficient = - (sum(all_object_acceleration_in_x)/len(all_object_acceleration_in_x)) / GRAVITY # ud = -a/g
+
+print(f"\n\nDynamic friction coefficient: {dynamic_friction_coefficient}\n\n")
+
 # data interpolation
 time_points_for_interpolated_plot = np.linspace(min(all_object_detection_time), max(all_object_detection_time), 100)
 
@@ -130,9 +138,9 @@ plt.clf()
 # force in function of position calculation
 for acceleration in all_object_acceleration_in_x:
     all_object_force_in_x.append(OBJECT_MASS * acceleration)
-
+''' 
 # data interpolation
-position_in_x_points_for_interpolated_plot = np.linspace(min(all_object_position_in_x), max(all_object_position_in_x), 100)
+#position_in_x_points_for_interpolated_plot = np.linspace(min(all_object_position_in_x), max(all_object_position_in_x), 100)
 
 object_acceleration_position_interpolation = interp1d(all_object_position_in_x, all_object_acceleration_in_x, kind='cubic')
 all_object_interpolated_acceleration_position = object_acceleration_position_interpolation(position_in_x_points_for_interpolated_plot)
@@ -153,3 +161,4 @@ plt.xlabel("Position in X (m)")
 plt.legend()
 
 plt.savefig(os.path.join(PLOTS_FILE_DIRECTORY, 'object_in_function_of_position.png'))
+'''

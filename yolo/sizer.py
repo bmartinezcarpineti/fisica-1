@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 # files constants
 TRACKER_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos')
-INPUT_VIDEO_NAME = 'vid8.mp4'
+INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos2')
+INPUT_VIDEO_NAME = 'vid1.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY, 'model.pt')
 
@@ -44,6 +44,9 @@ while successful_video_reading:
 input_video.release()
 cv2.destroyAllWindows()
 
-print(f"\nThe average width in pixels of the object in this video is: \
-{object_width_in_pixels_sumatory / object_detection_counter}\n\
-All detected width of the object are: {all_object_width_in_pixels}\n")
+if(object_detection_counter):
+    print(f"\nThe average width in pixels of the object in this video is: \
+    {object_width_in_pixels_sumatory / object_detection_counter}\n\
+    All detected width of the object are: {all_object_width_in_pixels}\n")
+else:
+    print("\nObject not detected\n")
