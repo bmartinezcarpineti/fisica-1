@@ -4,11 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from ultralytics import YOLO
+from scipy.signal import savgol_filter
 
 # files constants
 TRACKER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos3')
-INPUT_VIDEO_NAME = 'tarro3.mp4'
+INPUT_VIDEO_NAME = 'tarro2.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 OUTPUT_VIDEO_PATH = '{}_out.mp4'.format(INPUT_VIDEO_PATH)
 PLOTS_FILE_DIRECTORY = os.path.join(TRACKER_DIRECTORY_PATH, 'plots')
@@ -69,11 +70,13 @@ while successful_video_reading:
 
             # draws bounding box and label
             cv2.rectangle(frame, (int(object_x1), int(object_y1)), (int(object_x2), int(object_y2)), (0, 255, 0), 4)
-            #cv2.putText(frame, f"{(object_position_in_x / PIXELS_PER_METER):.2f} m, {object_speed_in_x:.2f} m/s, {object_acceleration_in_x:.2f} m/s^2", 
-            #            (int(object_x1), int(object_y1 - 10)), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3, cv2.LINE_AA)
 
     output_video.write(frame)
     successful_video_reading, frame = input_video.read() # gets next frame
+
+all_object_position_in_x = all_object_position_in_x[::5]
+all_object_detection_time = all_object_detection_time[::5]
+#all_object_position_in_x = savgol_filter(all_object_position_in_x, 6, 2)
 
 for position in all_object_position_in_x:
     if previous_position is not None:
@@ -83,12 +86,16 @@ for position in all_object_position_in_x:
         all_object_speed_in_x.append(object_speed_in_x)
     previous_position = position
 
+#all_object_speed_in_x = savgol_filter(all_object_speed_in_x, 7, 2)
+
 for speed in all_object_speed_in_x:
     if previous_speed is not None:
         object_speed_in_x_difference = speed - previous_speed
         object_acceleration_in_x = object_speed_in_x_difference / TIME_DIFFERENCE
         all_object_acceleration_in_x.append(object_acceleration_in_x)
     previous_speed = speed
+
+#all_object_acceleration_in_x = savgol_filter(all_object_acceleration_in_x, 7, 2)
 
 # clean up
 input_video.release()
