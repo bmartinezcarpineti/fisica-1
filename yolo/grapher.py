@@ -6,6 +6,7 @@ import numpy as np
 # files constants
 GRAPHER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 PLOTS_DIRECTORY = os.path.join(GRAPHER_DIRECTORY_PATH, 'plots')
+INPUT_CSV_PATH = os.path.join(GRAPHER_DIRECTORY_PATH, 'positions.csv')
 
 all_object_position_in_x = []
 all_object_detection_time = []
@@ -17,7 +18,7 @@ previous_position = None
 previous_speed = None
 OBJECT_MASS = 0.283 # unit: kg
 
-with open('positions.csv', 'r', newline='') as file:
+with open(INPUT_CSV_PATH, 'r', newline='') as file:
     reader = csv.reader(file)
     all_object_position_in_x = next(reader)
 

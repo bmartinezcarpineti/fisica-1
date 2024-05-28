@@ -9,6 +9,7 @@ INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos3')
 INPUT_VIDEO_NAME = 'tarro2.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'model.pt')
+OUTPUT_CSV_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'positions.csv')
 
 if not os.path.exists(INPUT_VIDEO_PATH):
     print(f"Error: Video file '{INPUT_VIDEO_PATH}' not found.")
@@ -26,8 +27,6 @@ THRESHOLD_CONFIDENCE_SCORE = 0.7
 yolo_model = YOLO(YOLO_MODEL_PATH)
 input_video = cv2.VideoCapture(INPUT_VIDEO_PATH)
 successful_video_reading, frame = input_video.read()
-input_video_frame_height, input_video_frame_width, _ = frame.shape
-output_video = cv2.VideoWriter(OUTPUT_VIDEO_PATH, cv2.VideoWriter_fourcc(*'MP4V'), int(input_video.get(cv2.CAP_PROP_FPS)), (input_video_frame_width, input_video_frame_height))
 
 # object variables and constants initalization
 all_object_position_in_x = []
@@ -48,10 +47,9 @@ while successful_video_reading:
 
 # clean up
 input_video.release()
-output_video.release()
 cv2.destroyAllWindows()
 
 # saves results to csv
-with open('positions.csv', 'w', newline='') as file:
+with open(OUTPUT_CSV_PATH, 'w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(all_object_position_in_x)
