@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 # files constants
 TRACKER_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos2')
-INPUT_VIDEO_NAME = 'vid1.mp4'
+INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos3')
+INPUT_VIDEO_NAME = 'tarro3.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY, 'model.pt')
 
@@ -15,7 +15,7 @@ if not os.path.exists(INPUT_VIDEO_PATH):
     exit()
 
 # AI model constants
-THRESHOLD_CONFIDENCE_SCORE = 0.7
+THRESHOLD_CONFIDENCE_SCORE = 0.5
 
 # video variables initalization
 yolo_model = YOLO(YOLO_MODEL_PATH)
@@ -34,6 +34,7 @@ while successful_video_reading:
         object_x1, object_y1, object_x2, object_y2, detection_confidence_score, object_class_id = result
 
         if detection_confidence_score > THRESHOLD_CONFIDENCE_SCORE:
+            print("entraa")
             object_detection_counter+=1
             object_width_in_pixels_sumatory+=(object_x2-object_x1)
             all_object_width_in_pixels.append(object_x2-object_x1)
