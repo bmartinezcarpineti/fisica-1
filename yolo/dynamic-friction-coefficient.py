@@ -11,8 +11,8 @@ df = pd.read_csv(INPUT_CSV_PATH)
 
 dynamic_friction_coefficient = - df['acceleration'].mean() / GRAVITY # ud = -a/g
 
+# calculates error
 acceleration_error = df['acceleration'].std() # acceleration error = accelartion standar deviation
-
 dynamic_friction_coefficient_error = (1 / GRAVITY) * acceleration_error
 
 print(f"\n\nDynamic friction coefficient: {dynamic_friction_coefficient}\n\
