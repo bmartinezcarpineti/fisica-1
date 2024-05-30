@@ -2,87 +2,47 @@ import csv
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from tabulate import tabulate
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # files constants
 GRAPHER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 PLOTS_DIRECTORY = os.path.join(GRAPHER_DIRECTORY_PATH, 'plots')
-INPUT_CSV_PATH = os.path.join(GRAPHER_DIRECTORY_PATH, 'positions.csv')
+INPUT_CSV_PATH = os.path.join(GRAPHER_DIRECTORY_PATH, 'data/elastic-data.csv')
 
-all_object_position_in_x = []
-all_object_detection_time = []
-all_object_speed_in_x = []
-all_object_acceleration_in_x = []
-all_object_force_in_x = []
-TIME_DIFFERENCE = 1 / 240 # 1 / FPS
-previous_position = None
-previous_speed = None
-OBJECT_MASS = 0.283 # unit: kg
+df = pd.read_csv(INPUT_CSV_PATH)
 
-with open(INPUT_CSV_PATH, 'r', newline='') as file:
-    reader = csv.reader(file)
-    all_object_position_in_x = next(reader)
+print(tabulate(df, headers='keys', tablefmt='psql'))
 
-all_object_position_in_x = [float(num) for num in all_object_position_in_x]
-all_object_detection_time = [TIME_DIFFERENCE + i * TIME_DIFFERENCE for i in range(len(all_object_position_in_x))]
+# Create subplots: one row for each plot
+fig = make_subplots(rows=3, cols=1, shared_xaxes=True, 
+                    vertical_spacing=0.1, subplot_titles=('Position vs Time', 'Speed vs Time', 'Acceleration vs Time'))
 
-#reduce the noise
-all_object_position_in_x = all_object_position_in_x[::3]
-all_object_detection_time = all_object_detection_time[::3]
+# Add position scatter plot
+fig.add_trace(go.Scatter(x=df['time'], y=df['position'], mode='lines+markers', name='Position'), row=1, col=1)
 
-#speed calculation
-for position in all_object_position_in_x:
-    if previous_position is not None:
-        object_position_in_x_difference = position - previous_position
-        object_speed_in_x = object_position_in_x_difference / TIME_DIFFERENCE
-        all_object_speed_in_x.append(object_speed_in_x)
-    previous_position = position
+# Add speed scatter plot
+fig.add_trace(go.Scatter(x=df['time'], y=df['speed'], mode='lines+markers', name='Speed'), row=2, col=1)
 
-#acceleration calculation
-for speed in all_object_speed_in_x:
-    if previous_speed is not None:
-        object_speed_in_x_difference = speed - previous_speed
-        object_acceleration_in_x = object_speed_in_x_difference / TIME_DIFFERENCE
-        all_object_acceleration_in_x.append(object_acceleration_in_x)
-    previous_speed = speed
+# Add acceleration scatter plot
+fig.add_trace(go.Scatter(x=df['time'], y=df['acceleration'], mode='lines+markers', name='Acceleration'), row=3, col=1)
 
-# object variables in function of time plot
-plt.subplot(311)
-plt.plot(all_object_detection_time, all_object_position_in_x, label="Position in X")
-plt.ylabel("m")
-plt.legend()
+# Update layout
+fig.update_layout(
+    title='Position, Speed, and Acceleration in X axis vs. Time',
+    height=900,  # Increase the height of the figure to accommodate three plots
+    showlegend=False  # Disable the legend for individual traces
+)
 
-plt.subplot(312)
-all_object_detection_time.pop(0)
-plt.plot(all_object_detection_time, all_object_speed_in_x, label="Speed in X")
-plt.ylabel("m/s")
-plt.legend()
+# Update x-axis title for the bottom plot
+fig.update_xaxes(title_text='Time (s)', row=3, col=1)
 
-plt.subplot(313)
-all_object_detection_time.pop(0)
-plt.plot(all_object_detection_time, all_object_acceleration_in_x, label="Acceleration in X")
-plt.ylabel("m/s^2")
-plt.xlabel("Time (s)")
-plt.legend()
+# Update y-axis titles for each plot
+fig.update_yaxes(title_text='Position (m)', row=1, col=1)
+fig.update_yaxes(title_text='Speed (m/s)', row=2, col=1)
+fig.update_yaxes(title_text='Acceleration (m/s^2)', row=3, col=1)
 
-plt.savefig(os.path.join(PLOTS_DIRECTORY, 'object_in_function_of_time.png'))
-
-plt.clf()
-
-# force in function of position calculation
-for acceleration in all_object_acceleration_in_x:
-    all_object_force_in_x.append(OBJECT_MASS * acceleration)
-
-all_object_position_in_x = np.delete(all_object_position_in_x,0)
-all_object_position_in_x = np.delete(all_object_position_in_x,0)
-plt.subplot(211)
-plt.plot(all_object_position_in_x, all_object_acceleration_in_x, label="Acceleration in X")
-plt.ylabel("m/s^2")
-plt.legend()
-
-plt.subplot(212)
-plt.plot(all_object_position_in_x, all_object_force_in_x, label="Force in X")
-plt.ylabel("N (kg * m/s^2)")
-plt.xlabel("Position in X (m)")
-plt.legend()
-
-plt.savefig(os.path.join(PLOTS_DIRECTORY, 'object_in_function_of_position.png'))
+# Show the figure
+fig.show()

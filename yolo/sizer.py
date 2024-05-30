@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 # files constants
 TRACKER_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
-INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos3')
+INPUT_VIDEOS_DIRECTORY = os.path.join(TRACKER_DIRECTORY, 'videos')
 INPUT_VIDEO_NAME = 'tarro3.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY, 'model.pt')

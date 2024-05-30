@@ -34,7 +34,7 @@ fig.add_trace(go.Scatter(x=df['time'], y=df['acceleration'], mode='lines+markers
 
 # Update layout
 fig.update_layout(
-    title='Position, Speed, and Acceleration vs. Time',
+    title='Position, Speed, and Acceleration in X axis vs. Time',
     height=900,  # Increase the height of the figure to accommodate three plots
     showlegend=False  # Disable the legend for individual traces
 )
