@@ -3,6 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 import math
+import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/elastic-data.csv')
@@ -27,9 +28,29 @@ for index, row in df.iterrows():
 
     elastic_constants.append(elastic_constant)
 
+df['elastic_constant'] = elastic_constants
+
 cleaned_elastic_constants = [i for i in elastic_constants if not math.isnan(i)] # removes NaN values
 
 mean_elastic_constant = np.mean(cleaned_elastic_constants)
 
 print(cleaned_elastic_constants)
-print(f"\n\nElastic constant: {mean_elastic_constant}\n\n")
+print(f"\nElastic constant: {mean_elastic_constant}\n")
+
+# plots the kinetic energy
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=df['time'],
+    y=df['elastic_constant'],
+    mode='lines+markers',
+    name='Elastic Constant'
+))
+
+fig.update_layout(
+    xaxis_title='Time (s)',
+    yaxis_title='Elastic Constant (N/m)',
+    title='Elastic Constant vs Time'
+)
+
+fig.show()

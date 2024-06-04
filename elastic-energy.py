@@ -3,6 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 import math
+import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/elastic-data.csv')
@@ -21,4 +22,24 @@ for index, row in df.iterrows():
 
     elastic_energies.append(elastic_energy)
 
+df['elastic_energy'] = elastic_energies
+
 print(elastic_energies)
+
+# plots the elastic energy
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=df['time'],
+    y=df['elastic_energy'],
+    mode='lines+markers',
+    name='Elastic Energy'
+))
+
+fig.update_layout(
+    xaxis_title='Time (s)',
+    yaxis_title='Elastic Energy (J)',
+    title='Elastic Energy vs Time'
+)
+
+fig.show()
