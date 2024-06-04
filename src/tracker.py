@@ -5,8 +5,8 @@ from ultralytics import YOLO
 
 # files constants
 TRACKER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos3')
-INPUT_VIDEO_NAME = 'tarro3.mp4'
+INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos')
+INPUT_VIDEO_NAME = 'tarro2.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'model.pt')
 OUTPUT_CSV_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'data/positions.csv')

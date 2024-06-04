@@ -10,6 +10,7 @@ INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/elastic-data.csv')
 
 GRAVITY = 9.81 # unit: m/s^s
 DYNAMIC_FRICTION_COEFFICIENT = 0.8
+ELASTIC_ZERO_POSITION = 0.28
 ELASTIC_L0 = 0.135 # unit: m
 OBJECT_MASS = 0.284 # unit: kg
 
@@ -19,10 +20,10 @@ df = pd.read_csv(INPUT_CSV_PATH)
 
 for index, row in df.iterrows():
     acceleration = row['acceleration']
-    position = row['position']
+    distance_to_elastic_zero = ELASTIC_ZERO_POSITION - row['position']
 
-    elastic_constant_numerator = OBJECT_MASS * (acceleration + DYNAMIC_FRICTION_COEFFICIENT * GRAVITY) * np.sqrt((ELASTIC_L0/2)**2 + position**2)
-    elastic_constant_denominator = 2 * position * (2 * np.sqrt((ELASTIC_L0/2)**2 + position**2) - ELASTIC_L0)
+    elastic_constant_numerator = OBJECT_MASS * (acceleration + DYNAMIC_FRICTION_COEFFICIENT * GRAVITY) * np.sqrt((ELASTIC_L0/2)**2 + distance_to_elastic_zero**2)
+    elastic_constant_denominator = 2 * distance_to_elastic_zero * (2 * np.sqrt((ELASTIC_L0/2)**2 + distance_to_elastic_zero**2) - ELASTIC_L0)
 
     elastic_constant = elastic_constant_numerator / elastic_constant_denominator
 
