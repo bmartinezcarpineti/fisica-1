@@ -9,11 +9,11 @@ from plotly.subplots import make_subplots
 # files constants
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/positions.csv')
-OUTPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/without-elastic-data.csv')
+OUTPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/series-elastic-data.csv')
 
 input_df = pd.read_csv(INPUT_CSV_PATH)
 
-# reduces noise (with elastic: 3, without elatic: 5)
+# reduces noise (friction only: 5, simple elastic: 5, double elastic: 3, series elastic: )
 reduced_noise_time = input_df['time'].iloc[::5]
 reduced_noise_position = input_df['position'].iloc[::5]
 
