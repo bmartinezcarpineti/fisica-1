@@ -6,7 +6,7 @@ import math
 import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/elastic-data.csv')
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/double-elastic-data.csv')
 
 ELASTIC_ZERO_POSITION = 0.28
 ELASTIC_L0 = 0.135 # unit: m
@@ -24,6 +24,8 @@ for index, row in df.iterrows():
     elastic_energies.append(elastic_energy)
 
 df['elastic_energy'] = elastic_energies
+
+df.to_csv(INPUT_CSV_PATH)
 
 print(elastic_energies)
 

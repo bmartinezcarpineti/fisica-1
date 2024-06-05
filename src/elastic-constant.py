@@ -6,7 +6,7 @@ import math
 import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/elastic-data.csv')
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/double-elastic-data.csv')
 
 GRAVITY = 9.81 # unit: m/s^s
 DYNAMIC_FRICTION_COEFFICIENT = 0.8

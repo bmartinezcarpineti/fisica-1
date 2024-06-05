@@ -6,7 +6,7 @@ import math
 import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/without-elastic-data.csv')
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/double-elastic-data.csv')
 
 OBJECT_MASS = 0.284 # unit: kg
 
@@ -22,6 +22,7 @@ for index, row in df.iterrows():
     kinetic_energies.append(kinetic_energy)
 
 df['kinetic_energy'] = kinetic_energies
+df.to_csv(INPUT_CSV_PATH)
 
 cleaned_kinetic_energies = [i for i in kinetic_energies if not math.isnan(i)] # removes NaN values
 
