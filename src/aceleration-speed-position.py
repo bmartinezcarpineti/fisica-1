@@ -21,6 +21,15 @@ position = df['position'].values
 
 acceleration = (-DYNAMIC_FRICTION_COEFFICIENT * GRAVITY) + (2 * ELASTIC_CONSTANT / OBJECT_MASS) * (2 * position - (ELASTIC_L0 * position) / np.sqrt(position**2 + (ELASTIC_L0 / 2)**2))
    
+speed_values = np.zeros_like(position)
+new_position = np.zeros_like(position)
+new_position[0] = position[0]  # La posición inicial es la primera del archivo
+
+for i in range(1, len(time)):
+    delta_t = time[i] - time[i-1]
+    speed_values[i] = speed_values[i-1] + acceleration[i-1] * delta_t
+    new_position[i] = new_position[i-1] + speed_values[i-1] * delta_t
+
 plt.figure(figsize=(12, 8))
 
 # Graficar aceleración
@@ -28,6 +37,22 @@ plt.subplot(3, 1, 1)
 plt.plot(time, acceleration, label='Aceleración')
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Aceleración (m/s^2)')
+plt.legend()
+plt.grid(True)
+
+# Graficar velocidad
+plt.subplot(3, 1, 2)
+plt.plot(time, speed_values, label='Velocidad', color='g')
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Velocidad (m/s)')
+plt.legend()
+plt.grid(True)
+
+# Graficar posición
+plt.subplot(3, 1, 3)
+plt.plot(time, new_position, label='Posición', color='r')
+plt.xlabel('Tiempo (s)')
+plt.ylabel('Posición (m)')
 plt.legend()
 plt.grid(True)
 
