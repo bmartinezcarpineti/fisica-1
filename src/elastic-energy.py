@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 STUDY_CASE = "double-elastic"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
-OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'plots', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-energy-plot.html')
+OUTPUT_RESULTS_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
 
 ELASTIC_ZERO_POSITION = 0.28
 ELASTIC_L0 = 0.135 # unit: m
@@ -47,5 +47,5 @@ fig.update_layout(
     title='Elastic Energy vs Time'
 )
 
-fig.write_html(OUTPUT_PLOT_PATH)
+fig.write_html(OUTPUT_RESULTS_PATH)
 fig.show()
