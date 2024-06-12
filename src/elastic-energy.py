@@ -4,11 +4,13 @@ import numpy as np
 import pandas as pd
 import math
 import plotly.graph_objects as go
+from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-STUDY_CASE = "double-elastic"
+STUDY_CASE = "series-elastic"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
-OUTPUT_RESULTS_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
+OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-energy.txt')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-energy-plot.html')
 
 ELASTIC_ZERO_POSITION = 0.28
 ELASTIC_L0 = 0.135 # unit: m
@@ -29,7 +31,12 @@ df['elastic_energy'] = elastic_energies
 
 df.to_csv(INPUT_CSV_PATH)
 
-print(elastic_energies)
+OUTPUT_STRING = f"Elastic energies: {elastic_energies}\n\nDate: {datetime.now()}"
+
+with open(OUTPUT_TXT_PATH, "w") as file:
+    file.write(OUTPUT_STRING)
+
+print(OUTPUT_STRING)
 
 # plots the elastic energy
 fig = go.Figure()
@@ -47,5 +54,5 @@ fig.update_layout(
     title='Elastic Energy vs Time'
 )
 
-fig.write_html(OUTPUT_RESULTS_PATH)
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()
