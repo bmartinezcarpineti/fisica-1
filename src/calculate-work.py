@@ -10,6 +10,7 @@ GRAVITY = 9.81  # unit: m/s^2
 OBJECT_MASS = 0.284  # unit: kg
 DYNAMIC_FRICTION_COEFFICIENT = 0.8
 ELASTIC_CONSTANT = 74.75  # unit: N/m
+ELASTIC_L0 = 0.135 # L0 
 
 ZERO_POSITION = 0.115
 FINAL_POSITION = 0.28333
@@ -20,20 +21,29 @@ friction_works = []
 elastic_works = []
 total_works = []
 kinetic_energy_variations = []
+last_position = ZERO_POSITION
+last_speed = 0
 
 for index, row in df.iterrows():
     position = row['position']
     speed = row['speed']
+    distance_to_elastic_zero = FINAL_POSITION - row['position']
 
     friction_forces = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
     
-    friction_work = friction_forces * (position - ZERO_POSITION)
+    friction_work = - (friction_forces * (position - ZERO_POSITION))
+    elastic_force = ELASTIC_CONSTANT * (2 * np.sqrt((ELASTIC_L0/2)**2 + distance_to_elastic_zero**2) - ELASTIC_L0)
 
-    elastic_work = ELASTIC_CONSTANT * 0.5 * (position**2 - ZERO_POSITION**2)
-   
-    total_work = elastic_work - friction_work
+    elastic_work = sum(elastic_works) + elastic_force * (position - last_position) # sumatoria de los anteriores + trabajo del tramo actual
 
-    variation_kinetic_energy = (0.5 * OBJECT_MASS * (speed**2)) - (0.5 * OBJECT_MASS * (0**2))
+    print(position - last_position)
+
+    total_work = elastic_work + friction_work
+    last_position = position
+
+    variation_kinetic_energy = (0.5 * OBJECT_MASS * (speed**2)) - (0.5 * OBJECT_MASS * (last_speed**2))
+
+    last_speed = speed
 
     friction_works.append(friction_work)
     elastic_works.append(elastic_work)
