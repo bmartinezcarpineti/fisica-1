@@ -11,7 +11,7 @@ THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 STUDY_CASE = "friction"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-positions.csv')
 OUTPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
-OUTPUT_RESULTS_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
 
 input_df = pd.read_csv(INPUT_CSV_PATH)
 
@@ -53,5 +53,5 @@ fig.update_yaxes(title_text='Position (m)', row=1, col=1)
 fig.update_yaxes(title_text='Speed (m/s)', row=2, col=1)
 fig.update_yaxes(title_text='Acceleration (m/s^2)', row=3, col=1)
 
-fig.write_html(OUTPUT_RESULTS_PATH)
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()

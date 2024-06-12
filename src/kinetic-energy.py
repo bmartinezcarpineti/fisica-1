@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 STUDY_CASE = "double-elastic"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
-OUTPUT_RESULTS_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
 
 OBJECT_MASS = 0.284 # unit: kg
 
@@ -46,5 +46,5 @@ fig.update_layout(
     title='Kinetic Energy vs Time'
 )
 
-fig.write_html(OUTPUT_RESULTS_PATH)
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()
