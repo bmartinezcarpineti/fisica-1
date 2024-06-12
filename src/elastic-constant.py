@@ -4,9 +4,13 @@ import numpy as np
 import pandas as pd
 import math
 import plotly.graph_objects as go
+from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/series-elastic-data.csv')
+STUDY_CASE = "series-elastic"
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
+OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant.txt')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant-plot.html')
 
 GRAVITY = 9.81 # unit: m/s^s
 DYNAMIC_FRICTION_COEFFICIENT = 0.8
@@ -35,8 +39,13 @@ cleaned_elastic_constants = [i for i in elastic_constants if not math.isnan(i)] 
 
 mean_elastic_constant = np.mean(cleaned_elastic_constants)
 
-print(cleaned_elastic_constants)
-print(f"\nElastic constant: {mean_elastic_constant}\n")
+OUTPUT_STRING = f"Elastic contants: {cleaned_elastic_constants}\n\
+Mean elastic constant: {mean_elastic_constant}\n\nDate: {datetime.now()}"
+
+with open(OUTPUT_TXT_PATH, "w") as file:
+    file.write(OUTPUT_STRING)
+
+print(OUTPUT_STRING)
 
 # plots the kinetic energy
 fig = go.Figure()
@@ -54,4 +63,5 @@ fig.update_layout(
     title='Elastic Constant vs Time'
 )
 
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()
