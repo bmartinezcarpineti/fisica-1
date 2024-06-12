@@ -4,11 +4,13 @@ import numpy as np
 import pandas as pd
 import math
 import plotly.graph_objects as go
+from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-STUDY_CASE = "double-elastic"
+STUDY_CASE = "friction"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
-OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
+OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-kinetic-energy.txt')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-kinetic-energy-plot.html')
 
 OBJECT_MASS = 0.284 # unit: kg
 
@@ -28,7 +30,12 @@ df.to_csv(INPUT_CSV_PATH)
 
 cleaned_kinetic_energies = [i for i in kinetic_energies if not math.isnan(i)] # removes NaN values
 
-print(cleaned_kinetic_energies)
+OUTPUT_STRING = f"Kinetic energies: {cleaned_kinetic_energies}\n\nDate: {datetime.now()}"
+
+with open(OUTPUT_TXT_PATH, "w") as file:
+    file.write(OUTPUT_STRING)
+
+print(OUTPUT_STRING)
 
 # plots the kinetic energy
 fig = go.Figure()
