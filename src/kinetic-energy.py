@@ -6,7 +6,9 @@ import math
 import plotly.graph_objects as go
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/double-elastic-data.csv')
+STUDY_CASE = "double-elastic"
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'plots', f'{STUDY_CASE}', f'{STUDY_CASE}-kinetic-energy-plot.html')
 
 OBJECT_MASS = 0.284 # unit: kg
 
@@ -44,4 +46,5 @@ fig.update_layout(
     title='Kinetic Energy vs Time'
 )
 
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()
