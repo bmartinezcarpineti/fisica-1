@@ -8,12 +8,14 @@ from plotly.subplots import make_subplots
 
 # files constants
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/positions.csv')
-OUTPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/series-elastic-data.csv')
+STUDY_CASE = "friction"
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-positions.csv')
+OUTPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'plots', f'{STUDY_CASE}', f'{STUDY_CASE}-speed-acceleration-plot.html')
 
 input_df = pd.read_csv(INPUT_CSV_PATH)
 
-# reduces noise (friction only: 5, simple elastic: 5, double elastic: 3, series elastic: )
+# reduces noise (friction only: 5, simple elastic: 3, double elastic: 3, series elastic: 5)
 reduced_noise_time = input_df['time'].iloc[::5]
 reduced_noise_position = input_df['position'].iloc[::5]
 
@@ -51,4 +53,5 @@ fig.update_yaxes(title_text='Position (m)', row=1, col=1)
 fig.update_yaxes(title_text='Speed (m/s)', row=2, col=1)
 fig.update_yaxes(title_text='Acceleration (m/s^2)', row=3, col=1)
 
+fig.write_html(OUTPUT_PLOT_PATH)
 fig.show()
