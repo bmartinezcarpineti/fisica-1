@@ -6,10 +6,10 @@ from ultralytics import YOLO
 # files constants
 TRACKER_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_VIDEOS_DIRECTORY_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'videos')
-INPUT_VIDEO_NAME = 'tarro-elastico-serie.mp4'
+INPUT_VIDEO_NAME = 'tarro-rozamiento.mp4'
 INPUT_VIDEO_PATH = os.path.join(INPUT_VIDEOS_DIRECTORY_PATH, INPUT_VIDEO_NAME)
 YOLO_MODEL_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'model.pt')
-OUTPUT_CSV_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'data/positions.csv')
+OUTPUT_CSV_PATH = os.path.join(TRACKER_DIRECTORY_PATH, 'data/friction-positions.csv')
 
 if not os.path.exists(INPUT_VIDEO_PATH):
     print(f"Error: Video file '{INPUT_VIDEO_PATH}' not found.")
