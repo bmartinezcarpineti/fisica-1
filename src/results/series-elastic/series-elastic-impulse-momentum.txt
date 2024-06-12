@@ -1,0 +1,4 @@
+Elastic force impulse: 2.5512789422415603
+Friction force impulse: -0.32503800000000016
+Total impulse: 2.22624094224156
+Variation of momentum: 0.3271679999999988

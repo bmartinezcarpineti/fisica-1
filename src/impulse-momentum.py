@@ -4,9 +4,12 @@ import numpy as np
 import pandas as pd
 import math
 import plotly.graph_objects as go
+from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/double-elastic-data.csv')
+STUDY_CASE = "series-elastic"
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
+OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-impulse-momentum.txt')
 
 GRAVITY = 9.81 # unit: m/s^s
 DYNAMIC_FRICTION_COEFFICIENT = 0.8
@@ -38,7 +41,12 @@ total_impulse = elastic_force_impulse + friction_force_impulse
 
 momentum_variation = (OBJECT_MASS * df['speed'].iloc[-1]) - (OBJECT_MASS * df['speed'].iloc[1]) # m * v(final) - m * v(inital)
 
-print(f"Elastic force impulse: {elastic_force_impulse}\n\
+OUTPUT_STRING = f"Elastic force impulse: {elastic_force_impulse}\n\
 Friction force impulse: {friction_force_impulse}\n\
 Total impulse: {total_impulse}\n\
-Variation of momentum: {momentum_variation}")
+Variation of momentum: {momentum_variation}"
+
+with open(OUTPUT_TXT_PATH, "w") as file:
+    file.write(OUTPUT_STRING)
+
+print(OUTPUT_STRING)
