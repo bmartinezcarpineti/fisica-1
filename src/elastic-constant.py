@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-STUDY_CASE = "series-elastic"
+STUDY_CASE = "simple-elastic"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
 OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant.txt')
 OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant-plot.html')
@@ -36,11 +36,14 @@ for index, row in df.iterrows():
 df['elastic_constant'] = elastic_constants
 
 cleaned_elastic_constants = [i for i in elastic_constants if not math.isnan(i)] # removes NaN values
+#cleaned_elastic_constants.pop(-1)
+#cleaned_elastic_constants.pop(-1)
 
 mean_elastic_constant = np.mean(cleaned_elastic_constants)
+elastic_constant_error = np.std(cleaned_elastic_constants)
 
 OUTPUT_STRING = f"Elastic contants: {cleaned_elastic_constants}\n\
-Mean elastic constant: {mean_elastic_constant}\n\nDate: {datetime.now()}"
+Mean elastic constant: {mean_elastic_constant}\nError: {elastic_constant_error}\n\nDate: {datetime.now()}"
 
 with open(OUTPUT_TXT_PATH, "w") as file:
     file.write(OUTPUT_STRING)
