@@ -1,4 +1,3 @@
-#results for case b)
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -14,12 +13,13 @@ DYNAMIC_FRICTION_COEFFICIENT = 0.8
 ELASTIC_CONSTANT = 74.75  # unit: N/m
 ELASTIC_L0 = 0.135 # unit: m
 
+# Cálculo de la aceleración teórica
 df = pd.read_csv(INPUT_CSV_PATH)
 
 time = df['time'].values
 position = df['position'].values
 
-acceleration = (-DYNAMIC_FRICTION_COEFFICIENT * GRAVITY) + (2 * ELASTIC_CONSTANT / OBJECT_MASS) * (2 * position - (ELASTIC_L0 * position) / np.sqrt(position**2 + (ELASTIC_L0 / 2)**2))
+acceleration_theoretical = (-DYNAMIC_FRICTION_COEFFICIENT * GRAVITY) + (2 * ELASTIC_CONSTANT / OBJECT_MASS) * (2 * position - (ELASTIC_L0 * position) / np.sqrt(position**2 + (ELASTIC_L0 / 2)**2))
    
 speed_values = np.zeros_like(position)
 new_position = np.zeros_like(position)
@@ -27,14 +27,14 @@ new_position[0] = position[0]  # La posición inicial es la primera del archivo
 
 for i in range(1, len(time)):
     delta_t = time[i] - time[i-1]
-    speed_values[i] = speed_values[i-1] + acceleration[i-1] * delta_t
+    speed_values[i] = speed_values[i-1] + acceleration_theoretical[i-1] * delta_t
     new_position[i] = new_position[i-1] + speed_values[i-1] * delta_t
 
 plt.figure(figsize=(12, 8))
 
-# Graficar aceleración
+# Graficar aceleración teórica y calculada
 plt.subplot(3, 1, 1)
-plt.plot(time, acceleration, label='Aceleración')
+plt.plot(time, acceleration_theoretical, label='Aceleración Teórica')
 plt.xlabel('Tiempo (s)')
 plt.ylabel('Aceleración (m/s^2)')
 plt.legend()
