@@ -26,15 +26,14 @@ for index, row in df.iterrows():
     position = row['position']
     speed = row['speed']
     distance_to_elastic_zero = FINAL_POSITION - row['position']
-
+    print(distance_to_elastic_zero)
     friction_forces = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
 
     friction_work = - friction_forces * (position - ZERO_POSITION)
 
     elastic_force = ELASTIC_CONSTANT * (2 * np.sqrt((ELASTIC_L0/2)**2 + distance_to_elastic_zero**2) - ELASTIC_L0)
     
-    elastic_work = elastic_force * (position - ZERO_POSITION)
-    print(position - ZERO_POSITION)
+    elastic_work = elastic_force * (FINAL_POSITION - position)
 
     total_work = elastic_work - friction_work
 
@@ -64,6 +63,7 @@ fig.update_layout(
 )
 output_html_path = os.path.join(THIS_FILE_DIRECTORY_PATH, 'work_energy_variation.html')
 fig.write_html(output_html_path)
+
 print(f"Friction work final: {friction_works[-1]}")  
 print(f"Elastic work final: {elastic_works[-1]}")  
 print(f"Total work final: {total_works[-1]}")  
