@@ -2,10 +2,13 @@ import os
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 # Define paths
+STUDY_CASE = 'simple-elastic'
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'data/simple-elastic-data.csv')
+INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
+OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-work-case-b.html')
 
 # Constants
 GRAVITY = 9.81  # unit: m/s^2
@@ -57,21 +60,22 @@ for index, row in df.iterrows():
     elastic_works.append(elastic_energy * (FINAL_POSITION - position))
     total_works.append(total_work)
 
-# Plot the results
+
 fig = go.Figure()
+
 fig.add_trace(go.Scatter(x=df['position'], y=friction_works, mode='lines+markers', name='Friction Work'))
 fig.add_trace(go.Scatter(x=df['position'], y=elastic_works, mode='lines+markers', name='Elastic Work'))
 fig.add_trace(go.Scatter(x=df['position'], y=total_works, mode='lines+markers', name='Total Work'))
 
 fig.update_layout(
-    title='Work Case B',
+    title='Work case B',
     xaxis_title='Position (m)',
     yaxis_title='Friction Work - Elastic Work - Total Work (Joules)',
     legend_title='Legend'
 )
 
-output_html_path = os.path.join(THIS_FILE_DIRECTORY_PATH, 'work_case_b.html')
-fig.write_html(output_html_path)
+fig.write_html(OUTPUT_PLOT_PATH)
+fig.show()
 
 # Print the final values
 print(f"Friction work final: {friction_works[-1]}")  
