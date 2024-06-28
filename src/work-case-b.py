@@ -25,7 +25,7 @@ FINAL_POSITION = 0.2366666666666666
 # Read the input CSV file
 df = pd.read_csv(INPUT_CSV_PATH)
 
-# Rellenar valores nan con 0 o un valor predeterminado
+# Rellenar valores nan con 0
 df.fillna(0, inplace=True)
 
 # Initialize lists for works
@@ -50,6 +50,8 @@ final_kinetic_energy = final_row['kinetic_energy'].values[0]
 # Calculate the change in kinetic energy
 kinetic_energy_variation = final_kinetic_energy - initial_kinetic_energy
 
+friction_force = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
+
 last_position = ZERO_POSITION
 elastic_work_total_1 = 0
 elastic_work_total_2 = 0
@@ -67,7 +69,6 @@ for index, row in df.iterrows():
     kinetic_energy = row['kinetic_energy']
 
     # Calculate friction work
-    friction_force = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
     friction_work = - friction_force * (position - ZERO_POSITION)
     friction_work_total = friction_work_total + friction_work
 
