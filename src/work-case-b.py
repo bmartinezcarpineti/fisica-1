@@ -39,6 +39,7 @@ elastic_energies = []
 kinetic_energies =[]
 elastic_forces_1 = []
 elastic_forces_2 = []
+resultant_forces = []
 
 initial_row = df.loc[df['position'] == ZERO_POSITION]
 final_row = df.loc[df['position'] == FINAL_POSITION]
@@ -84,6 +85,8 @@ for index, row in df.iterrows():
     elastic_work_total_1 = elastic_work_total_1 + elastic_work_1
     elastic_work_total_2 = elastic_work_total_2 + elastic_work_2
 
+    resultant_force = position * acceleration
+
     last_position = position
 
     # Calculate the variation in elastic energy
@@ -103,6 +106,7 @@ for index, row in df.iterrows():
     kinetic_energies.append(kinetic_energy)
     elastic_forces_1.append(elastic_force_1)
     elastic_forces_2.append(elastic_force_2)
+    resultant_forces.append(resultant_force)
 
 # First figure for elastic works
 fig = go.Figure()
@@ -111,7 +115,7 @@ fig.add_trace(go.Scatter(x=df['position'], y=elastic_works_1, mode='lines+marker
 fig.add_trace(go.Scatter(x=df['position'], y=elastic_works_2, mode='lines+markers', name='Trabajo Elástico 2')) 
 
 fig.update_layout(
-    title='Trabajo Fuerza Elástica',
+    title='Trabajo Fuerza Elástica vs Position',
     xaxis_title='Position (m)',
     yaxis_title='Trabajo Elástico (Joules)',
     font=dict(
@@ -140,9 +144,9 @@ fig2.add_trace(go.Scatter(x=df['position'], y=friction_works, mode='lines+marker
 fig2.add_trace(go.Scatter(x=df['position'], y=elastic_energies, mode='lines+markers', name='Energía Elástica'))
 
 fig2.update_layout(
-    title='Trabajo de Rozamiento y Energía Elástica',
+    title='Trabajo de Rozamiento vs Position',
     xaxis_title='Position (m)',
-    yaxis_title='Trabajo - Energía (Joules)',
+    yaxis_title='Trabajo (Joules)',
     font=dict(
         size=20,  # Tamaño de la fuente para todo el gráfico
     ),
@@ -167,11 +171,12 @@ fig3 = go.Figure()
 
 fig3.add_trace(go.Scatter(x=df['position'], y=elastic_forces_1, mode='lines+markers', name='Fuerza Elástica 1'))
 fig3.add_trace(go.Scatter(x=df['position'], y=elastic_forces_2, mode='lines+markers', name='Fuerza Elástica 2'))
+fig3.add_trace(go.Scatter(x=df['position'], y=resultant_forces, mode='lines+markers', name='Fuerza Resultante (F=m.a)'))
 
 fig3.update_layout(
-    title='Fuerza Potencial Elástica',
+    title='Fuerza Elástica y Resultante vs Position',
     xaxis_title='Position (m)',
-    yaxis_title='Fuerza Potencial Elástica (N)',
+    yaxis_title='Fuerza Elástica (N)',
     font=dict(
         size=20,  # Tamaño de la fuente para todo el gráfico
     ),
