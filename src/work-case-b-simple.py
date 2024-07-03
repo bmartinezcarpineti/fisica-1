@@ -19,7 +19,7 @@ DYNAMIC_FRICTION_COEFFICIENT = 0.8
 ELASTIC_CONSTANT = 32.24  # unit: N/m
 ELASTIC_L0 = 0.135  # L0 
 
-ZERO_POSITION = 0.1643333333333333
+ZERO_POSITION = 0.115
 FINAL_POSITION = 0.2193333333333333
 
 # Read the input CSV file
@@ -77,13 +77,16 @@ for index, row in df.iterrows():
     distance_to_elastic_zero = FINAL_POSITION - row['position']
     elastic_force_1 = ELASTIC_CONSTANT * (2 * np.sqrt((ELASTIC_L0/2)**2 + distance_to_elastic_zero**2) - ELASTIC_L0)
     elastic_work_1 = elastic_force_1 * (position - last_position)
-    
+    print(f"trabajo elastico 1: {elastic_work_1}")  
+
     # Calculate elastic work 2
     elastic_force_2 = (OBJECT_MASS * acceleration) + friction_force
     elastic_work_2 = elastic_force_2 * (position - last_position)
 
     elastic_work_total_1 = elastic_work_total_1 + elastic_work_1
     elastic_work_total_2 = elastic_work_total_2 + elastic_work_2
+
+    print(f"trabajo elastico 2: {elastic_work_2}")  
 
     resultant_force = position * acceleration
 
