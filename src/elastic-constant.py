@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
-STUDY_CASE = "double-elastic"
+STUDY_CASE = "series-elastic"
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
 OUTPUT_TXT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant.txt')
 OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-elastic-contant-plot.html')
@@ -54,16 +54,16 @@ print(OUTPUT_STRING)
 fig = go.Figure()
 
 fig.add_trace(go.Scatter(
-    x=df['time'],
+    x=df['position'],
     y=df['elastic_constant'],
     mode='lines+markers',
     name='Elastic Constant'
 ))
 
 fig.update_layout(
-    xaxis_title='Time (s)',
+    xaxis_title='Position (m)',
     yaxis_title='Elastic Constant (N/m)',
-    title='Elastic Constant vs Time'
+    title='Elastic Constant vs Position'
 )
 
 fig.write_html(OUTPUT_PLOT_PATH)

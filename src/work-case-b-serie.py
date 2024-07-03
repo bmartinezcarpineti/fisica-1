@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 # Define paths
-STUDY_CASE = 'double-elastic'
+STUDY_CASE = 'series-elastic'
 THIS_FILE_DIRECTORY_PATH = os.path.dirname(os.path.abspath(__file__))
 INPUT_CSV_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, f'data/{STUDY_CASE}-data.csv')
 OUTPUT_PLOT_PATH = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_CASE}', f'{STUDY_CASE}-work-elastic-case-b.html')
@@ -16,11 +16,11 @@ OUTPUT_PLOT_PATH_3 = os.path.join(THIS_FILE_DIRECTORY_PATH, 'results', f'{STUDY_
 GRAVITY = 9.81  # unit: m/s^2
 OBJECT_MASS = 0.284  # unit: kg
 DYNAMIC_FRICTION_COEFFICIENT = 0.8
-ELASTIC_CONSTANT = 74.96339703050364  # unit: N/m
+ELASTIC_CONSTANT = 11.32  # unit: N/m
 ELASTIC_L0 = 0.135  # L0 
 
-ZERO_POSITION = 0.1493333333333333
-FINAL_POSITION = 0.2366666666666666
+ZERO_POSITION = 0.077
+FINAL_POSITION = 0.1456666666666666
 
 # Read the input CSV file
 df = pd.read_csv(INPUT_CSV_PATH)
