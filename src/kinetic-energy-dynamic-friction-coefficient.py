@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import math
 from scipy.optimize import curve_fit
 import pandas as pd
 import plotly.graph_objects as go
@@ -31,7 +32,7 @@ kinetic_energy_dynamic_friction_coefficient = slope / (OBJECT_MASS * GRAVITY)
 # calculates error
 slope_error = errs[0]
 mass_error = 0.001 # mass = 0.284 ---> 3 lugares despiertos despues de la coma
-kinetic_energy_dynamic_friction_coefficient_error = ((1/(OBJECT_MASS * GRAVITY))*slope_error - (slope/(GRAVITY * OBJECT_MASS ** 2 ))* mass_error)
+kinetic_energy_dynamic_friction_coefficient_error = math.sqrt(((1/(OBJECT_MASS * GRAVITY)) ** 2 * slope_error ** 2 - (slope/(GRAVITY * OBJECT_MASS ** 2 )) ** 2 * mass_error ** 2))
 
 y = lineal(df.position,2.44,1.08)
 df['y']=y
