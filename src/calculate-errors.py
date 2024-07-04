@@ -39,6 +39,8 @@ error_G = 0.01
 acceleration_error = df['acceleration'].std()
 error_dynamic_friction_coefficient = (1 / 9.81) * acceleration_error
 
+print(f"Error en la aceleracion: {acceleration_error}")
+
 # Calcula el error en la velocidad para cada punto
 df['delta_position'] = error_X  # error en la posición
 df['delta_time'] = error_T  # error en el tiempo
@@ -51,9 +53,12 @@ error_general_velocidad = df['error_speed'].mean()  # error promedio
 
 # Calculate kinetic energy error
 speed = final_row['speed'].values[0]
-error_kinetic_energy = np.sqrt((0.5 * speed**2 * error_M)**2 + (OBJECT_MASS * speed * error_general_velocidad)**2)
 
+print(f"Error en la velocidad: {error_general_velocidad}")
+
+error_kinetic_energy = np.sqrt((0.5 * speed**2)**2 * (error_M)**2 + (OBJECT_MASS * speed)**2 * (error_general_velocidad)**2)
 print(f"Error en la variacion de energia cinética: {error_kinetic_energy}")
+
 
 # Calculate the error in friction work
 error_friction_work = np.sqrt((DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY * error_X)**2 +
@@ -61,4 +66,12 @@ error_friction_work = np.sqrt((DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAV
     (DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * (FINAL_POSITION - ZERO_POSITION) * error_G)**2 +
     (OBJECT_MASS * GRAVITY * (FINAL_POSITION - ZERO_POSITION) * error_dynamic_friction_coefficient)**2)
 
+friction_force = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
+
+error_friction_force = np.sqrt((OBJECT_MASS * GRAVITY * error_dynamic_friction_coefficient)**2 +
+                   (DYNAMIC_FRICTION_COEFFICIENT * GRAVITY * error_M)**2 +
+                   (DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * error_G)**2)
+
+print(f"Error en el coeficiente de rozamiento dinámico: {error_dynamic_friction_coefficient}")
+print(f"Error en la fuerza de rozamiento: {error_friction_force}")
 print(f"Error en el trabajo de rozamiento: {error_friction_work}")

@@ -51,7 +51,7 @@ final_kinetic_energy = final_row['kinetic_energy'].values[0]
 # Calculate the change in kinetic energy
 kinetic_energy_variation = final_kinetic_energy - initial_kinetic_energy
 
-friction_force = DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY
+friction_force = - (DYNAMIC_FRICTION_COEFFICIENT * OBJECT_MASS * GRAVITY)
 
 last_position = ZERO_POSITION
 elastic_work_total_1 = 0
@@ -70,7 +70,7 @@ for index, row in df.iterrows():
     kinetic_energy = row['kinetic_energy']
 
     # Calculate friction work
-    friction_work = - friction_force * (position - ZERO_POSITION)
+    friction_work = friction_force * (position - ZERO_POSITION)
     friction_work_total = friction_work_total + friction_work
 
     # Calculate elastic work 1
